@@ -5,7 +5,9 @@ pragma solidity =0.5.16;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow
- * checks.
+ * and underflow checks, and custom error messages.
+ *
+ * @dev Tests the add, sub, mul, div, and mod functions to ensure correctness and accurate error handling.
  *
  * Arithmetic operations in Solidity wrap on overflow. This can easily result
  * in bugs, because programmers usually assume that an overflow raises an
@@ -15,6 +17,8 @@ pragma solidity =0.5.16;
  *
  * Using this library instead of the unchecked operations eliminates an entire
  * class of bugs, so it's recommended to use it always.
+ *
+ * In case of an addition overflow, this function reverts the transaction with a custom error message.
  */
 library SafeMath {
     /**
@@ -43,6 +47,19 @@ library SafeMath {
     function add(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
         uint256 c = a + b;
         require(c >= a, errorMessage);
+    }
+
+    /**
+     * @dev Returns the addition of two unsigned integers, reverting with custom message on overflow.
+     *
+     * Counterpart to Solidity's `+` operator.
+     *
+     * Requirements:
+     * - Addition cannot overflow.
+     */
+    function add(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        uint256 c = a + b;
+        require(c >= a, errorMessage);
 
         return c;
     }
@@ -56,6 +73,19 @@ library SafeMath {
      * - Subtraction cannot underflow.
      */
     function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+    }
+
+    /**
+     * @dev Returns the subtraction of two unsigned integers, reverting with custom message on underflow.
+     *
+     * Counterpart to Solidity's `-` operator.
+     *
+     * Requirements:
+     * - Subtraction cannot underflow.
+     */
+    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        uint256 c = a - b;
+        require(b <= a, errorMessage);
         return sub(a, b, "SafeMath: subtraction underflow");
     }
 
@@ -83,6 +113,19 @@ library SafeMath {
      * - Multiplication cannot overflow.
      */
     function mul(uint256 a, uint256 b) internal pure returns (uint256) {
+    }
+
+    /**
+     * @dev Returns the multiplication of two unsigned integers, reverting with custom message on overflow.
+     *
+     * Counterpart to Solidity's `*` operator.
+     *
+     * Requirements:
+     * - Multiplication cannot overflow.
+     */
+    function mul(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
+        if (a == 0) {
+            return 0;
         // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
         // benefit is lost if 'b' is also tested.
         // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
@@ -131,6 +174,8 @@ library SafeMath {
      */
     function div(uint256 a, uint256 b) internal pure returns (uint256) {
         return div(a, b, "SafeMath: division by zero");
+    }
+}
     }
 
     /**
@@ -182,5 +227,14 @@ library SafeMath {
     function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
         require(b != 0, errorMessage);
         return a % b;
+    }
+    /**
+     * @dev Returns the integer division of two unsigned integers, reverting on division by zero.
+     * Counterpart to Solidity's `/` operator.
+     * Requirements:
+     * - The divisor cannot be zero.
+     */
+    function safeDiv(uint256 a, uint256 b) internal pure returns (uint256) {
+        return div(a, b, "SafeMath: division by zero");
     }
 }
